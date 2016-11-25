@@ -63,7 +63,7 @@ void RGB_to_YUV(uchar** img_in, uchar** img_out, int width, int height) {
 			img_out[2 * HEIGHT + h][w] = tempV;
 		}
 	}
-}
+}//RGB성분으로 YUV를 만들기 위한 수식에 대입해서 결과물 출력
 
 void YUV_to_RGB(uchar** img_in, uchar** img_out, int width, int height) {
 	int C, D, E;
@@ -88,4 +88,4 @@ void YUV_to_RGB(uchar** img_in, uchar** img_out, int width, int height) {
 			img_out[h+2*HEIGHT][w] = Clip(tempB);
 		}
 	}
-}
+}//YUV성분으로 RGB를 만들기 위한 수식에 대입해서 결과물 출력
