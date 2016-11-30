@@ -91,18 +91,72 @@ void YUV_to_RGB(uchar** img_in, uchar** img_out, int width, int height) {
 }//YUV성분으로 RGB를 만들기 위한 수식에 대입해서 결과물 출력
 
 void YUV444_to_420(uchar** img_in, uchar** img_Y, uchar** img_U420, uchar** img_V420, int width, int height) {
-	
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			img_Y[h][w] = img_in[h][w];
+		}
+	}
+
+	for (int h = 0; h < height/2; h++) {
+		for (int w = 0; w < width/2; w++) {
+			img_U420[h][w] = (img_in[HEIGHT + 2*h][2*w] + img_in[HEIGHT + 2*h][2*w + 1] + img_in[HEIGHT + 2*h + 1][2*w] + img_in[HEIGHT + 2*h + 1][2*w + 1]) / 4;
+			img_V420[h][w] = (img_in[HEIGHT*2 + 2*h][2*w] + img_in[HEIGHT * 2+2*h][2*w + 1] + img_in[HEIGHT * 2+2*h + 1][2*w] + img_in[HEIGHT * 2+2*h + 1][2*w + 1]) / 4;
+		}
+	}
 
 }
 
 void YUV420_to_444(uchar** img_Y, uchar** img_U420, uchar** img_V420, uchar** img_out, int width, int height) {
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			img_out[h][w] = img_Y[h][w];
+		}
+	}
 
+	for (int h = 0; h < height/2; h++) {
+		for (int w = 0; w < width/2; w++) {
+			img_out[HEIGHT + 2*h][2 * w] = img_U420[h][w];
+			img_out[HEIGHT + 2*h + 1][2 * w] = img_U420[h][w];
+			img_out[HEIGHT + 2 * h][2 * w + 1] = img_U420[h][w];
+			img_out[HEIGHT + 2 * h + 1][2 * w + 1] = img_U420[h][w];
+
+			img_out[2*HEIGHT + 2 * h][2 * w] = img_V420[h][w];
+			img_out[2*HEIGHT + 2 * h + 1][2 * w] = img_V420[h][w];
+			img_out[2*HEIGHT + 2 * h][2 * w + 1] = img_V420[h][w];
+			img_out[2*HEIGHT + 2 * h + 1][2 * w + 1] = img_V420[h][w];
+		}
+	}
 }
 
 void YUV444_to_422(uchar** img_in, uchar** img_Y, uchar** img_U422, uchar** img_V422, int width, int height) {
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			img_Y[h][w] = img_in[h][w];
+		}
+	}
 
+	for (int h = 0; h < height; h ++) {
+		for (int w = 0; w < width/2; w ++) {
+			img_U422[h][w] = (img_in[HEIGHT+h][2*w] + img_in[HEIGHT + h][2*w + 1]) / 2;
+			img_V422[h][w] = (img_in[HEIGHT*2 + h][2*w] + img_in[HEIGHT * 2 + h][2*w + 1]) / 2;
+		}
+	}
 }
 
 void YUV422_to_444(uchar** img_Y, uchar** img_U422, uchar** img_V422, uchar** img_out, int width, int height) {
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			img_out[h][w] = img_Y[h][w];
+		}
+	}
 
+	for (int h = 0; h < height; h ++) {
+		for (int w = 0; w < width/2; w ++) {
+			img_out[HEIGHT + h][2*w] = img_U422[h][w];
+			img_out[HEIGHT + h][2*w + 1] = img_U422[h][w];
+
+			img_out[2 * HEIGHT + h][2*w] = img_V422[h][w];
+			img_out[2 * HEIGHT + h][2*w + 1] = img_V422[h][w];
+		}
+	}
 }

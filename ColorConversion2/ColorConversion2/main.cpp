@@ -29,7 +29,7 @@ void main() {
 
 	while (size = Read_Frame(fp_in, img_RGB, WIDTH, HEIGHT * 3)) {
 		RGB_to_YUV(img_RGB, img_YUV444, WIDTH, HEIGHT);
-		Write_Frame(fp_out1, img_YUV444, WIDTH, HEIGHT * 3);
+		Write_Frame(fp_out0, img_YUV444, WIDTH, HEIGHT * 3);
 
 		YUV444_to_420(img_YUV444, img_Y, img_U420, img_V420, WIDTH, HEIGHT);
 		YUV444_to_422(img_YUV444, img_Y, img_U422, img_V422, WIDTH, HEIGHT);
@@ -52,15 +52,15 @@ void main() {
 	}
 
 	MemFree_2D(img_RGB, HEIGHT * 3);
-	MemFree_2D(img_RGB, HEIGHT * 3);
+	MemFree_2D(img_YUV444, HEIGHT * 3);
 
 	MemFree_2D(img_Y, HEIGHT);
 
 	MemFree_2D(img_U420, HEIGHT >> 1);
 	MemFree_2D(img_V420, HEIGHT >> 1);
 
-	MemFree_2D(img_U422, HEIGHT);
-	MemFree_2D(img_V422, HEIGHT);
+	MemFree_2D(img_U422, HEIGHT>> 2);
+	MemFree_2D(img_V422, HEIGHT>> 2);
 
 	fclose(fp_in);
 	fclose(fp_out0);
