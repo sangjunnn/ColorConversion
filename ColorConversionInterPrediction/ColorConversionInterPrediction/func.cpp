@@ -24,6 +24,17 @@ void MemFree_2D(uchar** pic, int height) {
 	free(pic);
 }//2차원 동적 메모리 해제
 
+float GetPSNR(uchar** img_ori, uchar** img_dist, int width, int height) {
+	float mse = 0;
+
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			mse += ((img_ori[i][j] - img_dist[i][j])*(img_ori[i][j] - img_dist[i][j])) / (float)(width*height);
+		}
+	}
+	return 10 * (float)log10((255 * 255) / mse);
+}
+
 int Read_Frame(FILE* fp_in, uchar** img_in, int width, int height) {
 	int size = 0;
 
@@ -177,6 +188,28 @@ void YUV422_to_444(uchar** img_Y, uchar** img_U422, uchar** img_V422, uchar** im
 			img_out[2 * HEIGHT + h][2 * w] = img_V422[h][w];
 			img_out[2 * HEIGHT + h][2 * w + 1] = img_V422[h][w];
 			//V422을 좌우 한 필셀씩 복사
+		}
+	}
+}
+
+void InterPrediction(uchar** img_ori, uchar** img_ref, uchar** img_pred, uchar** img_resi, uchar** img_recon, int width, int height, int block_size, int search_range) {
+	int k, l;
+	int SR_left = 0; 
+	int SR_right = 0;
+	int SR_top = 0;
+	int SR_bottom = 0;
+
+	int temp_resi;
+
+	float min_MAE;
+	float temp_MAE;
+
+	MV mv[HEIGHT / BLOCK_SIZE][WIDTH / BLOCK_SIZE];
+
+	for (int i = 0; i < height; i+= block_size) {
+		for (int j = 0; j < width; j += block_size) {
+			k = (int)(i / block_size);
+			l = (int)(j / block_size);
 		}
 	}
 }

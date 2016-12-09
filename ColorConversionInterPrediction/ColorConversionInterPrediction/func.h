@@ -20,14 +20,21 @@
 #define cHEIGHT (HEIGHT>>1)
 
 #define cBLOCK_SIZE (BLOCK_SIZE>>1)
-#define 
+#define cSR (SR>>1)
 
 #define Clip(x) (x < 0 ? 0 : (x > 255 ? 255 : x))
 
 typedef unsigned char uchar;
 
+typedef struct MV {
+	int x;
+	int y;
+}MV;
+
 uchar** MemAlloc_2D(int width, int height);
 void MemFree_2D(uchar** pic, int height);
+
+float GetPSNR(uchar** img_ori, uchar** img_dist, int width, int height);
 
 int Read_Frame(FILE* fp_in, uchar** img_in, int width, int height);
 void Write_Frame(FILE* fp_out, uchar** img_in, int width, int height);
