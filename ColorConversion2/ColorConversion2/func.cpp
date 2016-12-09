@@ -99,8 +99,18 @@ void YUV444_to_420(uchar** img_in, uchar** img_Y, uchar** img_U420, uchar** img_
 
 	for (int h = 0; h < height/2; h++) {
 		for (int w = 0; w < width/2; w++) {
-			img_U420[h][w] = (img_in[HEIGHT + 2*h][2*w] + img_in[HEIGHT + 2*h][2*w + 1] + img_in[HEIGHT + 2*h + 1][2*w] + img_in[HEIGHT + 2*h + 1][2*w + 1]) / 4;
-			img_V420[h][w] = (img_in[HEIGHT*2 + 2*h][2*w] + img_in[HEIGHT * 2+2*h][2*w + 1] + img_in[HEIGHT * 2+2*h + 1][2*w] + img_in[HEIGHT * 2+2*h + 1][2*w + 1]) / 4;
+			img_U420[h][w] = 
+				(img_in[HEIGHT + 2*h][2*w] + 
+				img_in[HEIGHT + 2*h][2*w + 1] + 
+				img_in[HEIGHT + 2*h + 1][2*w] + 
+				img_in[HEIGHT + 2*h + 1][2*w + 1]) / 4;
+			//U420을 구하기 위해 2x2블럭의 평균을 구함
+			img_V420[h][w] = 
+				(img_in[HEIGHT*2 + 2*h][2*w] + 
+				img_in[HEIGHT * 2+2*h][2*w + 1] + 
+				img_in[HEIGHT * 2+2*h + 1][2*w] +
+				img_in[HEIGHT * 2+2*h + 1][2*w + 1]) / 4;
+			//V420을 구하기 위해 2x2블럭의 평균을 구함
 		}
 	}
 
@@ -119,11 +129,13 @@ void YUV420_to_444(uchar** img_Y, uchar** img_U420, uchar** img_V420, uchar** im
 			img_out[HEIGHT + 2*h + 1][2 * w] = img_U420[h][w];
 			img_out[HEIGHT + 2 * h][2 * w + 1] = img_U420[h][w];
 			img_out[HEIGHT + 2 * h + 1][2 * w + 1] = img_U420[h][w];
+			//U420을 2x2블럭으로 복사
 
 			img_out[2*HEIGHT + 2 * h][2 * w] = img_V420[h][w];
 			img_out[2*HEIGHT + 2 * h + 1][2 * w] = img_V420[h][w];
 			img_out[2*HEIGHT + 2 * h][2 * w + 1] = img_V420[h][w];
 			img_out[2*HEIGHT + 2 * h + 1][2 * w + 1] = img_V420[h][w];
+			//V420을 2x2블럭으로 복사
 		}
 	}
 }
@@ -137,8 +149,14 @@ void YUV444_to_422(uchar** img_in, uchar** img_Y, uchar** img_U422, uchar** img_
 
 	for (int h = 0; h < height; h ++) {
 		for (int w = 0; w < width/2; w ++) {
-			img_U422[h][w] = (img_in[HEIGHT+h][2*w] + img_in[HEIGHT + h][2*w + 1]) / 2;
-			img_V422[h][w] = (img_in[HEIGHT*2 + h][2*w] + img_in[HEIGHT * 2 + h][2*w + 1]) / 2;
+			img_U422[h][w] = 
+				(img_in[HEIGHT+h][2*w] + 
+				img_in[HEIGHT + h][2*w + 1]) / 2;
+			//U422을 구하기 위해 인접한 두개 픽셀의 평균을 구함
+			img_V422[h][w] =
+				(img_in[HEIGHT*2 + h][2*w] + 
+				img_in[HEIGHT * 2 + h][2*w + 1]) / 2;
+			//V422을 구하기 위해 인접한 두개 픽셀의 평균을 구함
 		}
 	}
 }
@@ -154,9 +172,11 @@ void YUV422_to_444(uchar** img_Y, uchar** img_U422, uchar** img_V422, uchar** im
 		for (int w = 0; w < width/2; w ++) {
 			img_out[HEIGHT + h][2*w] = img_U422[h][w];
 			img_out[HEIGHT + h][2*w + 1] = img_U422[h][w];
+			//U422을 좌우 한 필셀씩 복사
 
 			img_out[2 * HEIGHT + h][2*w] = img_V422[h][w];
 			img_out[2 * HEIGHT + h][2*w + 1] = img_V422[h][w];
+			//V422을 좌우 한 필셀씩 복사
 		}
 	}
 }
