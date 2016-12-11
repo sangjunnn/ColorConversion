@@ -31,6 +31,9 @@ typedef struct MV {
 	int y;
 }MV;
 
+int GetMin(int a, int b);
+int GetMax(int a, int b);
+
 uchar** MemAlloc_2D(int width, int height);
 void MemFree_2D(uchar** pic, int height);
 
@@ -46,6 +49,8 @@ void YUV444_to_420(uchar** img_in, uchar** img_Y, uchar** img_U420, uchar** img_
 void YUV420_to_444(uchar** img_Y, uchar** img_U420, uchar** img_V420, uchar** img_out, int width, int height);
 
 void InterPrediction(uchar** img_ori, uchar** img_ref, uchar** img_pred, uchar** img_resi, uchar** img_recon, int width, int height, int block_size, int search_range);
+
+MV GetMV(uchar** current, uchar** reference, uchar** output, int cur_i, int cur_j, int width, int height, int block, int searchrange);
 
 #endif // !Inter_Prediction
 

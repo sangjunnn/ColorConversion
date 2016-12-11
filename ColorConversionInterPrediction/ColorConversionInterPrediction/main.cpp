@@ -60,8 +60,8 @@ void main() {
 	printf("Predicted V component PSNR value : %.3f\n\n", GetPSNR(img_ori_V, img_pred_V, cWIDTH, cHEIGHT));
 
 	printf("Reconstructed Y component PSNR value : %.3f\n", GetPSNR(img_ori_Y, img_recon_Y, WIDTH, HEIGHT));
-	printf("Reconstructed Y component PSNR value : %.3f\n", GetPSNR(img_ori_U, img_recon_U, cWIDTH, cHEIGHT));
-	printf("Reconstructed Y component PSNR value : %.3f\n\n", GetPSNR(img_ori_V, img_recon_V, cWIDTH, cHEIGHT));
+	printf("Reconstructed U component PSNR value : %.3f\n", GetPSNR(img_ori_U, img_recon_U, cWIDTH, cHEIGHT));
+	printf("Reconstructed V component PSNR value : %.3f\n\n", GetPSNR(img_ori_V, img_recon_V, cWIDTH, cHEIGHT));
 
 	YUV420_to_444(img_pred_Y, img_pred_U, img_pred_V, img_YUV444, WIDTH, HEIGHT);
 	YUV_to_RGB(img_YUV444, img_RGB, WIDTH, HEIGHT);

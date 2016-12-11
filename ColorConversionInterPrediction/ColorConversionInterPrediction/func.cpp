@@ -2,6 +2,24 @@
 
 #include "func.h"
 
+int GetMax(int a, int b) {
+	if (a<b) {
+		return b;
+	}
+	else {
+		return a;
+	}
+}
+
+int GetMin(int a, int b) {
+	if (a<b) {
+		return a;
+	}
+	else {
+		return b;
+	}
+}
+
 uchar** MemAlloc_2D(int width, int height) {
 	uchar** pic;
 
@@ -193,23 +211,58 @@ void YUV422_to_444(uchar** img_Y, uchar** img_U422, uchar** img_V422, uchar** im
 }
 
 void InterPrediction(uchar** img_ori, uchar** img_ref, uchar** img_pred, uchar** img_resi, uchar** img_recon, int width, int height, int block_size, int search_range) {
-	int k, l;
-	int SR_left = 0; 
-	int SR_right = 0;
-	int SR_top = 0;
-	int SR_bottom = 0;
+	MV temp;
 
-	int temp_resi;
-
-	float min_MAE;
-	float temp_MAE;
 
 	MV mv[HEIGHT / BLOCK_SIZE][WIDTH / BLOCK_SIZE];
 
 	for (int i = 0; i < height; i+= block_size) {
 		for (int j = 0; j < width; j += block_size) {
-			k = (int)(i / block_size);
-			l = (int)(j / block_size);
+			
+			temp = GetMV(img_ori, img_ref, img_recon, i, j, width, height, block_size, search_range);
+
+			for (int w = 0; w < block_size; w++) {
+				for (int h = 0; h < block_size; h++) {
+					img_recon[(i + w)][j + h] = img_ref[(temp.y + w)][(temp.x + h)];
+				}
+			}
+
 		}
 	}
+}
+
+MV GetMV(uchar** current, uchar** reference, uchar** output, int cur_i, int cur_j,int width, int height, int block, int searchrange) {
+
+	float min = 10000;
+	float result;
+	int cnt;
+	MV temp;
+
+	temp.x = 0;
+	temp.y = 0;
+
+	for (int y = GetMax(0, cur_i - searchrange); y < GetMin(height - block - 1, cur_i + searchrange - block - 1); y++) {
+		for (int x = GetMax(0, cur_j - searchrange); x < GetMin(width - block - 1, cur_j + searchrange - block - 1); x++) {
+
+			result = 0;
+			cnt = 0;
+			for (int k = 0; k < block; k++) {
+				for (int l = 0; l < block; l++) {
+
+					result += (current[(cur_i + k)][cur_j + l] - reference[(y + k)][(x + l)]);
+					cnt++;
+				}
+			}
+
+			result /= cnt;
+
+			if (result <= min) {
+
+				min = result;
+				temp.x = x;
+				temp.y = y;
+			}
+		}
+	}
+	return temp;
 }
