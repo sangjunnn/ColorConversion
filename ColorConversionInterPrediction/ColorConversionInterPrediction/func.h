@@ -1,4 +1,5 @@
 //DSPE_2011706153_이상준_13
+//기말고사 두번째 주에 시험이 많이 몰려있어서 과제를 완벽하게 수행하지 못했습니다.
 
 #ifndef Inter_Prediction
 #define Inter_Prediction

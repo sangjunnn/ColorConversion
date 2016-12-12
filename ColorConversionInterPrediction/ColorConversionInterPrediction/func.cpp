@@ -220,10 +220,11 @@ void InterPrediction(uchar** img_ori, uchar** img_ref, uchar** img_pred, uchar**
 		for (int j = 0; j < width; j += block_size) {
 			
 			temp = GetMV(img_ori, img_ref, img_recon, i, j, width, height, block_size, search_range);
-
+			//모션 벡터를 받아오는 temp를 사용
 			for (int w = 0; w < block_size; w++) {
 				for (int h = 0; h < block_size; h++) {
 					img_recon[(i + w)][j + h] = img_ref[(temp.y + w)][(temp.x + h)];
+					//모션 벡터를 기준으로 블락을 ref로부터 복사해옴
 				}
 			}
 
@@ -250,19 +251,22 @@ MV GetMV(uchar** current, uchar** reference, uchar** output, int cur_i, int cur_
 				for (int l = 0; l < block; l++) {
 
 					result += (current[(cur_i + k)][cur_j + l] - reference[(y + k)][(x + l)]);
+					//MSE 값을 구하기 위해서 ori와 ref의 블락 내부의 차의 합을 구함 
 					cnt++;
+					//블락의 사이즈가 유동적이기 때문에 cnt라는 변수를 이용하여 블락의 크기를 받아옴
 				}
 			}
 
-			result /= cnt;
+			result /= cnt;//과제 수행에 필요한 MSE를 구함
 
 			if (result <= min) {
 
 				min = result;
 				temp.x = x;
 				temp.y = y;
+				//MSE를 최소값을 가지는 x,y의 좌표를 구함
 			}
 		}
 	}
-	return temp;
+	return temp;//struct형태로 반환
 }
